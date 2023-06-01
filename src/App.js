@@ -41,14 +41,10 @@ const App = () => {
 
   useEffect(() => {
     const savedNotes = JSON.parse(localStorage.getItem("react-notes-app-data"));
-    if(savedNotes){
-      setNotes(savedNotes)
+    if (savedNotes) {
+      setNotes(savedNotes);
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("react-notes-app-data", JSON.stringify(notes));
-  }, [notes]);
 
   const addNote = (text) => {
     const date = new Date();
@@ -59,6 +55,7 @@ const App = () => {
     };
     const newNotes = [...notes, newNote];
     setNotes(newNotes);
+    localStorage.setItem("react-notes-app-data", JSON.stringify(newNotes));
   };
 
   const deleteNote = (id) => {
