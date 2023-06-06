@@ -1,14 +1,20 @@
 import React from "react";
 import { useState } from "react";
+import axios from "axios";
 
-const AddNote = ({ handleAddNote }) => {
+function AddNote({ handleAddNote }) {
   const [noteText, setNoteText] = useState("");
   const characterLimit = 200;
 
-  const handleChange = (event) => {
-    if (characterLimit - event.target.value.length >= 0) {
-      setNoteText(event.target.value);
-    }
+  const handleChange = async (event) => {
+    let res = await axios.post("http://localhost:1500/notes/add-notes", event, {
+      headers: {
+        Authorization: `Bearer $ {token}`,
+      },
+    });
+    // if (characterLimit - event.target.value.length >= 0) {
+    //   setNoteText(event.target.value);
+    // }
   };
 
   const handleSaveClick = () => {
@@ -35,6 +41,6 @@ const AddNote = ({ handleAddNote }) => {
       </div>
     </div>
   );
-};
+}
 
 export default AddNote;
