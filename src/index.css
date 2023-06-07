@@ -12,27 +12,28 @@ code {
     monospace;
 }
 
-.header{
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.dark-mode{
-  background: black
+.dark-mode {
+  background: black;
 }
 
-.dark-mode h1{
+.dark-mode h1 {
   color: white;
 }
 
 .container {
   max-width: 960px;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 0 auto;
   padding-right: 15px;
   padding-left: 15px;
   min-height: 100vh;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .notes-list {
@@ -78,6 +79,17 @@ textarea:focus {
   white-space: pre-wrap;
 }
 
+.edit {
+  background-color: #fef68a;
+  border-radius: 10px;
+  padding: 1rem;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: pre-wrap;
+}
+
 .note-footer {
   display: flex;
   align-items: center;
@@ -105,5 +117,3 @@ textarea:focus {
 .search input:focus {
   outline: none;
 }
-
-

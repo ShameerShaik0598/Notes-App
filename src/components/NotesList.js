@@ -2,8 +2,20 @@ import React, { useState, useEffect } from "react";
 import Note from "./Note";
 import AddNote from "./AddNote";
 import axios from "axios";
+import Dashboard from "./Dashboard";
 
-function NotesList({ notes, handleAddNote, handleDeleteNote }) {
+function NotesList({
+  handleAddNote,
+  deleteNote,
+  noteAdded,
+  updateNote,
+  setUpdatedNote,
+  updateANote,
+  setNoteAdded,
+  noteDeleted,
+  setNoteDeleted,
+  handleSearchNote,
+}) {
   const [allnotes, setNotes] = useState([]);
 
   let token = sessionStorage.getItem("token");
@@ -14,29 +26,36 @@ function NotesList({ notes, handleAddNote, handleDeleteNote }) {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data.payload);
     setNotes(res.data.payload);
   };
 
   useEffect(() => {
     getNotes([]);
-  }, []);
+    setNoteAdded(false);
+    setUpdatedNote(false);
+    setNoteDeleted(false);
+  }, [noteAdded, updateNote, noteDeleted]);
 
-  {
-    return (
+  return (
+    <div>
       <div className="notes-list">
         {allnotes.map((note) => (
           <Note
+            key={note.note_id}
             id={note.note_id}
             text={note.note}
             date={note.date}
-            handleDeleteNote={handleDeleteNote}
+            deleteNote={deleteNote}
+            getNotes={getNotes}
+            updateNote={updateNote}
+            setUpdatedNote={setUpdatedNote}
+            updateANote={updateANote}
           />
         ))}
         <AddNote handleAddNote={handleAddNote} />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default NotesList;

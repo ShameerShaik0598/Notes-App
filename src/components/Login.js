@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-// import "./Login.css";
+import "../Login.css";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 // import pic from "./undraw_secure_login_pdn4.png";
@@ -12,7 +12,7 @@ function Login() {
   let dispatch = useDispatch();
   const { handleSubmit, register, reset } = useForm();
   let { userObj, errorMessage, status } = useSelector((state) => state.user);
-
+  // console.log(userObj);
   const handleLogin = (credentials) => {
     console.log(credentials);
     let actionObj = userLogin(credentials);

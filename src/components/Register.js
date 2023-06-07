@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import "./Register.css";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -34,6 +35,7 @@ function Register() {
       setErr(err.message);
     }
     reset();
+    navigate("/");
   };
 
   return (
@@ -42,13 +44,13 @@ function Register() {
         Register
       </p>
       {err && <p className="text-center text-danger fs-1">{err}</p>}
-      <div >
+      <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             {/* First Name  */}
             <div className="m-3 mt-3">
-            <div className="inputbox d-flex justify-content-between m-1">
-              <lable className="form-label fw-bold">First Name</lable>
+              <div className="inputbox d-flex justify-content-between m-1">
+                <lable className="form-label fw-bold">First Name</lable>
               </div>
               <input
                 className="form-control"
@@ -110,6 +112,15 @@ function Register() {
               <button className="registerBtn btn btn-success d-block mx-auto m-3">
                 <span style={{ color: "white" }}>Submit</span>
               </button>
+            </div>
+            <div className="createaccount text-center text-dark ">
+              <p>Have an account. </p>
+              <NavLink
+                className="text-primary text-decoration-none"
+                to="/login"
+              >
+                Login
+              </NavLink>
             </div>
           </div>
         </form>
