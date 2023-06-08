@@ -1,66 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-// import { Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-const Note = ({
-  id,
-  text,
-  date,
-  deleteNote,
-  getNotes,
-  setUpdatedNote,
-  updateANote,
-}) => {
+const Note = ({ id, text, deleteNote, getNotes, updateANote }) => {
+  //states for editing the exisiting notes
   const [isEditing, setIsEditing] = useState(false);
   const [textValue, setTextValue] = useState("");
   const [editedValue, setEditedValue] = useState("");
 
-  // const navigate = useNavigate();
-  // const [updateNote, setUpdatedNote] = useState(false);
-
-  // //update a note
-  // const updateANote = async (id, editedValue) => {
-  //   // const navigate = useNavigate();
-  //   try {
-  //     let res = await axios.put(
-  //       `http://localhost:1500/notes/update-notes/${id}`,
-  //       {
-  //         note: editedValue,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-
-  //     setUpdatedNote(true);
-  //     if (res.status === 200) {
-  //       // setMessage("Note Updated Successfully");
-  //     } else {
-  //       // setMessage("Failed to update the Note");
-  //     }
-  //     // navigate("/get-all-notes");
-  //   } catch (error) {
-  //     // setMessage("An error has occured while updating ");
-  //     console.error(error);
-  //   }
-  // };
-
+  //edit the text
   const handleEditClick = () => {
     setIsEditing(true);
     setEditedValue(text);
     setTextValue(text);
   };
 
+  //set the edited value
   const handleInputChange = (event) => {
     console.log(event.target.value);
     setEditedValue(event.target.value);
   };
 
+  //saving editedText to the note
   const handleSave = () => {
     if (editedValue.trim().length > 0) {
       updateANote(id, editedValue);
@@ -84,7 +45,6 @@ const Note = ({
         <div className="note">
           <span>{text}</span>
           <div className="note-footer">
-            {/* <small>{date}</small> */}
             <FaEdit onClick={handleEditClick}>Edit</FaEdit>
             <MdDeleteForever
               className="delete-icon"
