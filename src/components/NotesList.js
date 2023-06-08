@@ -14,12 +14,12 @@ function NotesList({
   noteDeleted,
   setNoteDeleted,
 }) {
-
   const [allnotes, setNotes] = useState([]);
+  const [noteColorMap, setNoteColorMap] = useState({}); // State to store note colors
 
   let token = sessionStorage.getItem("token");
 
-  //get all notes (Notes-List)
+  // Get all notes (Notes-List)
   const getNotes = async () => {
     let res = await axios.get("http://localhost:1500/notes/get-all-notes", {
       headers: {
@@ -27,6 +27,14 @@ function NotesList({
       },
     });
     setNotes(res.data.payload);
+  };
+
+  // Function to update the color of a note
+  const updateNoteColor = (noteId, color) => {
+    setNoteColorMap((prevNoteColorMap) => ({
+      ...prevNoteColorMap,
+      [noteId]: color,
+    }));
   };
 
   useEffect(() => {
@@ -44,11 +52,11 @@ function NotesList({
           id={note.note_id}
           text={note.note}
           date={note.date}
+          color={noteColorMap[note.note_id]} // Pass the note color as a prop
           deleteNote={deleteNote}
           getNotes={getNotes}
-          updateNote={updateNote}
-          setUpdatedNote={setUpdatedNote}
           updateANote={updateANote}
+          updateNoteColor={updateNoteColor} // Pass the updateNoteColor function as a prop
         />
       ))}
       <AddNote handleAddNote={handleAddNote} />

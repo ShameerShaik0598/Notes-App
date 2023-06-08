@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 
 function AddNote({ handleAddNote }) {
-
   const [noteText, setNoteText] = useState("");
 
   //maintaining characterLimit

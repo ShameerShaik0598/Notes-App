@@ -8,14 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../userLoginSlice";
 
 function Login() {
-
   //create dispatcher
   let dispatch = useDispatch();
 
   const { handleSubmit, register, reset } = useForm();
 
   let { userObj, errorMessage, status } = useSelector((state) => state.user);
- 
+
   //handlelogin
   const handleLogin = (credentials) => {
     console.log(credentials);
