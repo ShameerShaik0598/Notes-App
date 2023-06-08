@@ -3,16 +3,20 @@ import "bootstrap/dist/css/bootstrap.css";
 import "../Login.css";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-// import pic from "./undraw_secure_login_pdn4.png";
+import pic from "./undraw_taking_notes_re_bnaf.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../userLoginSlice";
 
 function Login() {
+
   //create dispatcher
   let dispatch = useDispatch();
+
   const { handleSubmit, register, reset } = useForm();
+
   let { userObj, errorMessage, status } = useSelector((state) => state.user);
-  // console.log(userObj);
+ 
+  //handlelogin
   const handleLogin = (credentials) => {
     console.log(credentials);
     let actionObj = userLogin(credentials);
@@ -32,8 +36,8 @@ function Login() {
     <div className="row">
       <div className="col">
         <div className="col">
-          <h1 className="display-1 text-center">Notes App</h1>
-          {/* <img className="pic w-100" src={pic} /> */}
+          <h1 className="display-1 text-center ">Notes App</h1>
+          <img className="pic" src={pic} />
         </div>
       </div>
       <div className="col">

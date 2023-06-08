@@ -28,12 +28,19 @@ code {
 
 .container {
   max-width: 960px;
-  margin: 0 auto;
+  margin-right: auto;
+  margin-left: auto;
   padding-right: 15px;
   padding-left: 15px;
   min-height: 100vh;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+@media (max-width: 575px) {
+  .pic {
+    display: none;
+  }
 }
 
 .notes-list {

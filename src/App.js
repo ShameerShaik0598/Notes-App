@@ -1,24 +1,23 @@
-import React, { Children, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Provider } from "react-redux";
+import axios from "axios";
+
+//import components
 import NotesList from "./components/NotesList";
 import Search from "./components/Search";
 import Dashboard from "./components/Dashboard";
 import RootLayout from "./components/Rootlayout";
 import ErrorPage from "./components/ErrorPage";
-import { Provider } from "react-redux";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import store from "./store";
-// import { useDispatch } from "react-redux";
-// import { clearState } from "./userLoginSlice";
-
-import axios from "axios";
 
 const App = () => {
+  // maintaining states
+
   const [notes, setNotes] = useState([]);
 
   const [searchText, setSearchText] = useState("");
@@ -32,6 +31,8 @@ const App = () => {
   const [message, setMessage] = useState("");
 
   let token = sessionStorage.getItem("token");
+
+  //functions
 
   //add a note
   const addNote = async (text) => {
@@ -150,25 +151,11 @@ const App = () => {
       <RouterProvider router={browserRouterObj}>
         <div>
           {/* Provide to App  */}
-          <div className="container">
+          <div>
             <Dashboard />
             <Search setSearchText={setSearchText} />
             <div>
-              <NotesList
-                notes={notes.filter((note) =>
-                  note.text.toLowerCase().includes(searchText.toLowerCase())
-                )}
-                handleAddNote={addNote}
-                deleteNote={deleteNote}
-                noteAdded={noteAdded}
-                setNoteAdded={setNoteAdded}
-                updateANote={updateANote}
-                updateNote={updateNote}
-                setUpdatedNote={setUpdatedNote}
-                noteDeleted={noteDeleted}
-                setNoteDeleted={setNoteDeleted}
-                handleSearchNote={setSearchText}
-              />
+              <NotesList />
             </div>
           </div>
         </div>

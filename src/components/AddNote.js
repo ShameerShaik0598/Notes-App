@@ -1,27 +1,28 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-// import axios from "axios";
 
 function AddNote({ handleAddNote }) {
 
   const [noteText, setNoteText] = useState("");
+
+  //maintaining characterLimit
   const characterLimit = 200;
 
+  //handleChange
   const handleChange = async (event) => {
     if (characterLimit - event.target.value.length >= 0) {
       setNoteText(event.target.value);
     }
   };
 
+  //save note
   const handleSaveClick = () => {
     if (noteText.trim().length > 0) {
       handleAddNote(noteText);
       setNoteText("");
     }
   };
-  useEffect(() => {
-    // console.log(noteText);
-  });
+  useEffect(() => {});
 
   return (
     <div className="note new">
