@@ -1,0 +1,12 @@
+.button:hover {
+  background: linear-gradient(170deg, #41687e 5%, #15dd8a 95%);
+  letter-spacing: 0.25em;
+  box-shadow: 0 0 25px;
+}
+
+.form-box {
+  box-shadow: rgba(3, 3, 3, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 25px;
+}

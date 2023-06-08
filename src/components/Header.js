@@ -1,19 +1,40 @@
-import React from "react";
+// import React from "react";
+// import { NavLink } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
 
-const Header = ({ handleToggleDarkMode }) => {
-  return (
-    <div className="header">
-      <h1>Notes</h1>
-      <button
-        onClick={() =>
-          handleToggleDarkMode((previousDarkMode) => !previousDarkMode)
-        }
-        className="save"
-      >
-        Toggle Mode
-      </button>
-    </div>
-  );
-};
+// function Header() {
+//   let { status } = useSelector((state) => state.user);
+//   let dispatch = useDispatch();
 
-export default Header;
+//   return (
+//     <div className="p-2 bg-dark text-white">
+//       <ul className="nav justify-content-end">
+//         {/* link for registration  */}
+//         <li className="nav-item">
+//           <NavLink
+//             className={({ isActive }) =>
+//               isActive ? "active nav-link" : "inactive nav-link"
+//             }
+//             to="/register"
+//           >
+//             Register
+//           </NavLink>
+//         </li>
+//         {/* link for login  */}
+//         <li className="nav-item">
+//           <NavLink
+//             className={({ isActive }) =>
+//               isActive ? "active nav-link" : "inactive nav-link"
+//             }
+//             to="/login"
+//           >
+//             Login
+//           </NavLink>
+//         </li>
+//         {/* link for contactUs  */}
+//       </ul>
+//     </div>
+//   );
+// }
+
+// export default Header;

@@ -1,82 +1,179 @@
-import React, { useEffect } from "react";
+import React, { Children, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
-import { nanoid } from "nanoid";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NotesList from "./components/NotesList";
 import Search from "./components/Search";
-import Header from "./components/Header";
+import Dashboard from "./components/Dashboard";
+import RootLayout from "./components/Rootlayout";
+import ErrorPage from "./components/ErrorPage";
+import { Provider } from "react-redux";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import store from "./store";
+// import { useDispatch } from "react-redux";
+// import { clearState } from "./userLoginSlice";
+
+import axios from "axios";
 
 const App = () => {
-  const [notes, setNotes] = useState([
+  const [notes, setNotes] = useState([]);
+
+  const [searchText, setSearchText] = useState("");
+
+  const [noteAdded, setNoteAdded] = useState(false);
+
+  const [noteDeleted, setNoteDeleted] = useState(false);
+
+  const [updateNote, setUpdatedNote] = useState(false);
+
+  const [message, setMessage] = useState("");
+
+  let token = sessionStorage.getItem("token");
+
+  //add a note
+  const addNote = async (text) => {
+    console.log("addNote text", text);
+    let res = await axios.post(
+      "http://localhost:1500/notes/add-notes",
+      { note: text },
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      }
+    );
+    setNoteAdded(true);
+  };
+
+  //update a note
+  const updateANote = async (id, editedValue) => {
+    try {
+      let res = await axios.put(
+        `http://localhost:1500/notes/update-notes/${id}`,
+        {
+          note: editedValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      setUpdatedNote(true);
+      if (res.status === 200) {
+        setMessage("Note Updated Successfully");
+      } else {
+        setMessage("Failed to update the Note");
+      }
+      // navigate("/get-all-notes");
+    } catch (error) {
+      setMessage("An error has occured while updating ");
+      console.error(error);
+    }
+  };
+
+  //delete a note
+  const deleteNote = async (note_id) => {
+    try {
+      let res = await axios.put(
+        `http://localhost:1500/notes/delete-notes/${note_id}`,
+        {
+          status: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setNoteDeleted(true);
+      if (res.status === 200) {
+        setMessage("Notes Deleted succesfully");
+      } else {
+        setMessage("Error while deleting the notes");
+      }
+    } catch (err) {
+      setMessage("Error occured at deleting the note");
+      console.log(err);
+    }
+  };
+
+  //create Browser Route
+  const browserRouterObj = createBrowserRouter([
     {
-      id: nanoid(),
-      text: "This is my first note!",
-      date: "12/04/2022",
-    },
-    {
-      id: nanoid(),
-      text: "This is my second note!",
-      date: "12/04/2022",
-    },
-    {
-      id: nanoid(),
-      text: "This is my third note!",
-      date: "12/04/2022",
-    },
-    {
-      id: nanoid(),
-      text: "This is my fourth note!",
-      date: "12/04/2022",
-    },
-    {
-      id: nanoid(),
-      text: "This is my fifth note!",
-      date: "12/04/2022",
+      path: "/",
+      element: <RootLayout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "login",
+          element: <Login />,
+        },
+        {
+          path: "register",
+          element: <Register />,
+        },
+        {
+          path: "get-all-notes",
+          element: (
+            <NotesList
+              notes={notes.filter((note) =>
+                note.text.toLocaleLowerCase().includes(searchText)
+              )}
+              handleAddNote={addNote}
+              deleteNote={deleteNote}
+              noteAdded={noteAdded}
+              setNoteAdded={setNoteAdded}
+              updateANote={updateANote}
+              updateNote={updateNote}
+              setUpdatedNote={setUpdatedNote}
+              noteDeleted={noteDeleted}
+              setNoteDeleted={setNoteDeleted}
+              handleSearchNote={setSearchText}
+            />
+          ),
+        },
+        {
+          path: "",
+          element: <Navigate to="login" replace={true} />,
+        },
+      ],
     },
   ]);
 
-  const [searchText, setSerachText] = useState("");
-
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem("react-notes-app-data"));
-    if (savedNotes) {
-      setNotes(savedNotes);
-    }
-  }, []);
-
-  const addNote = (text) => {
-    const date = new Date();
-    const newNote = {
-      id: nanoid(),
-      text: text,
-      date: date.toLocaleDateString,
-    };
-    const newNotes = [...notes, newNote];
-    setNotes(newNotes);
-    localStorage.setItem("react-notes-app-data", JSON.stringify(newNotes));
-  };
-
-  const deleteNote = (id) => {
-    const newNotes = notes.filter((note) => note.id !== id);
-    setNotes(newNotes);
-  };
-
   return (
-    <div className={`${darkMode && "dark-mode"}`}>
-      <div className="container">
-        <Header handleToggleDarkMode={setDarkMode} />
-        <Search handleSearchNote={setSerachText} />
-        <NotesList
-          notes={notes.filter((note) =>
-            note.text.toLocaleLowerCase().includes(searchText)
-          )}
-          handleAddNote={addNote}
-          handleDeleteNote={deleteNote}
-        />
-      </div>
-    </div>
+    <Provider store={store}>
+      <RouterProvider router={browserRouterObj}>
+        <div>
+          {/* Provide to App  */}
+          <div className="container">
+            <Dashboard />
+            <Search setSearchText={setSearchText} />
+            <div>
+              <NotesList
+                notes={notes.filter((note) =>
+                  note.text.toLowerCase().includes(searchText.toLowerCase())
+                )}
+                handleAddNote={addNote}
+                deleteNote={deleteNote}
+                noteAdded={noteAdded}
+                setNoteAdded={setNoteAdded}
+                updateANote={updateANote}
+                updateNote={updateNote}
+                setUpdatedNote={setUpdatedNote}
+                noteDeleted={noteDeleted}
+                setNoteDeleted={setNoteDeleted}
+                handleSearchNote={setSearchText}
+              />
+            </div>
+          </div>
+        </div>
+      </RouterProvider>
+    </Provider>
   );
 };
 

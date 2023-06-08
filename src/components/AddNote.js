@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+// import axios from "axios";
 
-const AddNote = ({ handleAddNote }) => {
+function AddNote({ handleAddNote }) {
+
   const [noteText, setNoteText] = useState("");
   const characterLimit = 200;
 
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     if (characterLimit - event.target.value.length >= 0) {
       setNoteText(event.target.value);
     }
@@ -17,6 +19,9 @@ const AddNote = ({ handleAddNote }) => {
       setNoteText("");
     }
   };
+  useEffect(() => {
+    // console.log(noteText);
+  });
 
   return (
     <div className="note new">
@@ -35,6 +40,6 @@ const AddNote = ({ handleAddNote }) => {
       </div>
     </div>
   );
-};
+}
 
 export default AddNote;
