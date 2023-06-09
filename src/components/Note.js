@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { BsFillPaletteFill } from "react-icons/bs";
 import Popover from "react-popover";
 import { Card } from "react-bootstrap";
+import { FiInfo } from "react-icons/fi";
 
 const Note = ({
   id,
@@ -20,6 +21,7 @@ const Note = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(color);
   const [isColorPopoverOpen, setIsColorPopoverOpen] = useState(false);
+  const [isInfoPopoverOpen, setIsInfoPopoverOpen] = useState(false);
 
   const colorOptions = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF"];
 
@@ -114,14 +116,25 @@ const Note = ({
     setIsColorPopoverOpen(false);
   };
 
+  const popoverContentForInfo = (
+    <Card className="popover-card">
+      <Card.Body className="popover-body">
+        <Card.Text>{text}</Card.Text>
+      </Card.Body>
+    </Card>
+  );
+
+  const handleInfoPopoverOpen = () => {
+    setIsInfoPopoverOpen(true);
+  };
+
+  const handleInfoPopoverClose = () => {
+    setIsInfoPopoverOpen(false);
+  };
+
   return (
-    <div className="card mb-3" style={{ backgroundColor: selectedColor }}>
-      <div
-        className="card-body"
-        style={{ backgroundColor: selectedColor }}
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      >
+    <div className="card " style={{ backgroundColor: selectedColor }}>
+      <div className="card-body" style={{ backgroundColor: selectedColor }}>
         {isEditing ? (
           <div>
             <div
@@ -141,16 +154,16 @@ const Note = ({
               }}
               dangerouslySetInnerHTML={{ __html: editedValue }}
             />
-            <div className="note-footer">
+            <div className="note-footer mt-4">
               <button
                 onClick={handleSave}
-                className="btn btn-success w-50 mx-auto mt-2"
+                className="btn btn-success w-25 mx-auto mt-2"
               >
                 Save
               </button>
               <button
                 onClick={handleCancel}
-                className="btn btn-danger w-50 mx-auto mt-2"
+                className="btn btn-danger w-25 mx-auto mt-2"
               >
                 Close
               </button>
@@ -158,9 +171,9 @@ const Note = ({
           </div>
         ) : (
           <>
-            <p className="card-text">{renderPreviewText()}</p>
-            <div className="note-footer">
-              <FaEdit className="edit-icon" onMouseEnter={handlePopoverOpen}>
+            <p className="card-text mb-4">{renderPreviewText()}</p>
+            <div className="note-footer border-0">
+              <FaEdit className="edit-icon" onClick={handleEditClick}>
                 Edit
               </FaEdit>
               <Popover
@@ -174,6 +187,29 @@ const Note = ({
                   size="1.3em"
                   onClick={() => setIsColorPopoverOpen(true)}
                 />
+                <Popover
+                  isOpen={isColorPopoverOpen}
+                  body={popoverContentForColor}
+                  onOuterAction={handleColorPopoverClose}
+                  preferPlace="below"
+                >
+                  <div
+                    className="card"
+                    style={{ backgroundColor: selectedColor }}
+                  ></div>
+                </Popover>
+              </Popover>
+              <Popover
+                isOpen={isInfoPopoverOpen}
+                body={popoverContentForInfo}
+                onOuterAction={handleInfoPopoverClose}
+                preferPlace="below"
+              >
+                <FiInfo
+                  className="info-icon"
+                  size="1.3em"
+                  onClick={handleInfoPopoverOpen}
+                />
               </Popover>
               <MdDeleteForever
                 className="delete-icon"
@@ -185,16 +221,6 @@ const Note = ({
             </div>
           </>
         )}
-        <Popover
-          isOpen={isColorPopoverOpen}
-          body={popoverContentForColor}
-          onOuterAction={handleColorPopoverClose}
-          preferPlace="below"
-        >
-          <div className="card mb-3" style={{ backgroundColor: selectedColor }}>
-            {/* ...existing code for card body */}
-          </div>
-        </Popover>
       </div>
     </div>
   );

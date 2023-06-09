@@ -1,0 +1,487 @@
+import React, { useEffect, useState, useRef } from "react";
+
+function AddNote({ handleAddNote }) {
+  const [noteText, setNoteText] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const textareaRef = useRef(null);
+  const cardRef = useRef(null);
+
+  // handleChange
+  const handleChange = (event) => {
+    if (event.target.value.length >= 0) {
+      setNoteText(event.target.value);
+    }
+  };
+
+  // save note
+  const handleSaveClick = () => {
+    if (noteText.trim().length > 0) {
+      handleAddNote(noteText);
+      setNoteText("");
+      setIsEditing(false);
+    }
+  };
+
+  // Handle click to enable editing
+  const handleClick = () => {
+    setIsEditing(true);
+  };
+
+  // Handle mousedown outside of the card to exit editing mode
+  const handleOutsideClick = (event) => {
+    if (cardRef.current && !cardRef.current.contains(event.target)) {
+      if (isEditing) {
+        handleSaveClick();
+      }
+      setIsEditing(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isEditing]);
+
+  return (
+    <div
+      className={`card mb-3 ${isEditing ? "editing" : ""}`}
+      onClick={handleClick}
+      ref={cardRef}
+    >
+      <div className="card-body">
+        {isEditing ? (
+          <textarea
+            className="card-textarea"
+            rows="8"
+            cols="10"
+            placeholder="Type to add a note..."
+            value={noteText}
+            onChange={handleChange}
+            ref={textareaRef}
+          ></textarea>
+        ) : (
+          <p className="card-text">{noteText || "Click to add a note..."}</p>
+        )}
+        <div className="note-footer">
+          {isEditing && (
+            <button
+              className="btn btn-primary save"
+              onClick={handleSaveClick}
+            >
+              Save
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddNote;
+
+
+
+
+
+
+
+
+
+
+//with no outside clickimport React, { useEffect, useState, useRef } from "react";
+
+function AddNote({ handleAddNote }) {
+  const [noteText, setNoteText] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const textareaRef = useRef(null);
+  const cardRef = useRef(null);
+
+  // handleChange
+  const handleChange = (event) => {
+    if (event.target.value.length >= 0) {
+      setNoteText(event.target.value);
+    }
+  };
+
+  // save note
+  const handleSaveClick = () => {
+    if (noteText.trim().length > 0) {
+      handleAddNote(noteText);
+      setNoteText("");
+      setIsEditing(false);
+    }
+  };
+
+  // Handle click to enable editing
+  const handleClick = () => {
+    setIsEditing(true);
+  };
+
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isEditing]);
+
+  return (
+    <div
+      className={`card mb-3 ${isEditing ? "editing" : ""}`}
+      onClick={handleClick}
+      ref={cardRef}
+    >
+      <div className="card-body">
+        {isEditing ? (
+          <textarea
+            className="card-textarea"
+            rows="8"
+            cols="10"
+            placeholder="Type to add a note..."
+            value={noteText}
+            onChange={handleChange}
+            ref={textareaRef}
+          ></textarea>
+        ) : (
+          <p className="card-text">{noteText || "Click to add a note..."}</p>
+        )}
+        <div className="note-footer">
+          {isEditing && (
+            <button
+              className="btn btn-primary save"
+              onClick={handleSaveClick}
+            >
+              Save
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddNote;
+
+
+
+//note popover for colors
+import React, { useState, useRef } from "react";
+import { MdDeleteForever } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { BsFillPaletteFill } from "react-icons/bs";
+import Popover from "react-popover";
+import { Card } from "react-bootstrap";
+
+const Note = ({
+  id,
+  text,
+  color,
+  deleteNote,
+  getNotes,
+  updateANote,
+  updateNoteColor,
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [textValue, setTextValue] = useState("");
+  const [editedValue, setEditedValue] = useState("");
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(color);
+  const [isColorPopoverOpen, setIsColorPopoverOpen] = useState(false);
+
+  const colorOptions = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF"];
+
+  const previewCharacterLimit = 100;
+  const shouldShowSeeMore = text.length > previewCharacterLimit;
+
+  const editableRef = useRef(null);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setEditedValue(text);
+    setTextValue(text);
+    setIsPopoverOpen(false);
+  };
+
+  const handleInputChange = () => {
+    const updatedText = editableRef.current.textContent;
+    if (updatedText.length >= 0) {
+      setEditedValue(updatedText);
+    }
+  };
+
+  const handleSave = () => {
+    if (editedValue.trim().length > 0) {
+      updateANote(id, editedValue);
+      getNotes();
+      setIsEditing(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditedValue(text);
+    setIsEditing(false);
+  };
+
+  const handlePopoverOpen = () => {
+    setIsPopoverOpen(true);
+  };
+
+  const handlePopoverClose = () => {
+    setIsPopoverOpen(false);
+  };
+
+  const handleColorPopoverClose = () => {
+    setIsColorPopoverOpen(false);
+  };
+
+  const popoverContent = (
+    <Card className="popover-card">
+      <Card.Body className="popover-body">
+        <Card.Text>{text}</Card.Text>
+      </Card.Body>
+    </Card>
+  );
+
+  const popoverContentForColor = (
+    <Card className="popover-card">
+      <Card.Body className="popover-body color-options-container">
+        {colorOptions.map((colorOption) => (
+          <div
+            key={colorOption}
+            className="color-option"
+            style={{ backgroundColor: colorOption }}
+            onClick={() => handleColorChange(colorOption)}
+          />
+        ))}
+      </Card.Body>
+    </Card>
+  );
+
+  const renderPreviewText = () => {
+    if (shouldShowSeeMore && !isEditing) {
+      return (
+        <>
+          {text.slice(0, previewCharacterLimit)}
+          <span style={{ display: "inline" }}>
+            {"... "}
+            <a href="#" onClick={handleEditClick}>
+              See more
+            </a>
+          </span>
+        </>
+      );
+    } else {
+      return text;
+    }
+  };
+
+  const handleColorChange = (newColor) => {
+    setSelectedColor(newColor);
+    updateNoteColor(id, newColor);
+    setIsColorPopoverOpen(false);
+  };
+
+  return (
+    <div className="card mb-3" style={{ backgroundColor: selectedColor }}>
+      <div
+        className="card-body"
+        style={{ backgroundColor: selectedColor }}
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}
+      >
+        {isEditing ? (
+          <div>
+            <div
+              className="edit-card"
+              contentEditable
+              ref={editableRef}
+              onBlur={handleInputChange}
+              style={{
+                outline: "none",
+                boxShadow: "none",
+                padding: "0",
+                margin: "0",
+                width: "100%",
+                height: "100%",
+                lineHeight: "1.5",
+                resize: "none",
+              }}
+              dangerouslySetInnerHTML={{ __html: editedValue }}
+            />
+            <div className="note-footer mt-4">
+              <button
+                onClick={handleSave}
+                className="btn btn-success w-25 mx-auto mt-2"
+              >
+                Save
+              </button>
+              <button
+                onClick={handleCancel}
+                className="btn btn-danger w-25 mx-auto mt-2"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="card-text mb-4">{renderPreviewText()}</p>
+            <div className="note-footer">
+              <FaEdit className="edit-icon" onClick={handleEditClick}>
+                Edit
+              </FaEdit>
+              <Popover
+                isOpen={isPopoverOpen}
+                body={popoverContent}
+                onOuterAction={handlePopoverClose}
+                preferPlace="below"
+              >
+                <BsFillPaletteFill
+                  className="change-color-icon"
+                  size="1.3em"
+                  onClick={() => setIsColorPopoverOpen(true)}
+                />
+              </Popover>
+              <MdDeleteForever
+                className="delete-icon"
+                size="1.3em"
+                onClick={() => {
+                  deleteNote(id);
+                }}
+              />
+            </div>
+          </>
+        )}
+        <Popover
+          isOpen={isColorPopoverOpen}
+          body={popoverContentForColor}
+          onOuterAction={handleColorPopoverClose}
+          preferPlace="below"
+        >
+          <div className="card mb-3" style={{ backgroundColor: selectedColor }}>
+            {/* ...existing code for card body */}
+          </div>
+        </Popover>
+      </div>
+    </div>
+  );
+};
+
+export default Note;
+
+
+// Function to get the count of total notes created by the user in one day
+exports.getCountOfNotesInOneDay = expressAsyncHandler(async (req, res) => {
+  // Get the current date
+  const currentDate = new Date();
+
+  // Set the start and end time of the day
+  const startTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    0,
+    0,
+    0
+  );
+  const endTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    23,
+    59,
+    59
+  );
+
+  // Find the count of notes created by the user within the specified time range
+  const totalNotesCount = await Notes.count({
+    where: {
+      user_id: req.params.user_id,
+      createdAt: {
+        [Op.between]: [startTime, endTime],
+      },
+    },
+  });
+  res.send({
+    message: "total count of notes",
+    startTime,
+    endTime,
+    totalNotesCount,
+  });
+});
+
+
+
+// Function to get the count of total notes created by the user in one day
+exports.getCountOfNotesInOneDay = expressAsyncHandler(async (req, res) => {
+  // Get the current date
+  const currentDate = new Date();
+
+  // Set the start and end time of the day
+  const startTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    0,
+    0,
+    0
+  );
+  const endTime = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    23,
+    59,
+    59
+  );
+
+  // Find the count of notes created by the user within the specified time range
+  const totalNotesCount = await Notes.count({
+    where: {
+      user_id: req.params.user_id,
+      createdAt: {
+        [Op.between]: [startTime, endTime],
+      },
+    },
+  });
+
+  // Send email notification
+  const transporter = nodemailer.createTransport({
+    // Configure your email provider here
+    service: process.env.EMAIL_SERVICE_PROVIDER,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: req.body.email,
+    subject: "Notes Count",
+    text: `Total notes created today: ${totalNotesCount}`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+    
+      console.log("Error occurred while sending email:", error);
+    } else {
+     
+      console.log("Email sent successfully:", info.response);
+    }
+  });
+
+  res.send({
+    message: "Total count of notes",
+    startTime,
+    endTime,
+    totalNotesCount,
+  });
+});

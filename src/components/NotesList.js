@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Note from "./Note";
 import AddNote from "./AddNote";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function NotesList({
   handleAddNote,
@@ -15,6 +16,7 @@ function NotesList({
   setNoteDeleted,
 }) {
   const [allnotes, setNotes] = useState([]);
+  const navigate = useNavigate();
   const [noteColorMap, setNoteColorMap] = useState({}); // State to store note colors
 
   let token = sessionStorage.getItem("token");
@@ -38,6 +40,11 @@ function NotesList({
   };
 
   useEffect(() => {
+    let token = sessionStorage.getItem("token");
+    console.log("token is", token);
+    if (token == undefined) {
+      navigate("/login");
+    }
     getNotes([]);
     setNoteAdded(false);
     setUpdatedNote(false);
