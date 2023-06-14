@@ -66,10 +66,14 @@ code {
   border-top-left-radius: 0;
 }
 
+.edit-card {
+  background: #67d7cc;
+}
+
 .edit-text {
   border: none;
   resize: none;
-  background-color: #fef68a;
+  background-color: #67d7cc;
 }
 
 textarea:focus {

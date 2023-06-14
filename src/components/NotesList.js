@@ -42,7 +42,7 @@ function NotesList({
   useEffect(() => {
     let token = sessionStorage.getItem("token");
     console.log("token is", token);
-    if (token == undefined) {
+    if (token === undefined) {
       navigate("/login");
     }
     getNotes([]);
