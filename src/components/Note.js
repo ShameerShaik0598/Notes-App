@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
@@ -35,7 +36,20 @@ const Note = ({
     setEditedValue(text);
     setTextValue(text);
     setIsPopoverOpen(false);
+  
+    // Set cursor at the end of the text
+    setTimeout(() => {
+      const editableNode = editableRef.current;
+      editableNode.focus();
+      const range = document.createRange();
+      range.selectNodeContents(editableNode);
+      range.collapse(false);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }, 0);
   };
+  
 
   const handleInputChange = () => {
     const updatedText = editableRef.current.textContent;
