@@ -17,10 +17,14 @@ const StyledCard = styled(Card)`
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   width: 240px;
-  // background: #ebebf2;
+  // background: red;
   margin: 8px;
   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
   padding: 10px 5px 10px 5px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Note = ({
