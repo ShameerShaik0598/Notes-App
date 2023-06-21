@@ -1,30 +1,48 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Box, TextField, ClickAwayListener, Button } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { v4 as uuid } from "uuid";
+
+const Container = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+  border-color: #e0e0e0;
+  width: 600px;
+  border-radius: 8px;
+  min-height: 30px;
+  padding: 10px 15px;
+`;
 
 function AddNote({ handleAddNote }) {
   const [noteText, setNoteText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [showTextField, setShowTextField] = useState(false);
   const textareaRef = useRef(null);
-  const cardRef = useRef(null);
 
-  // handleChange
-  const handleChange = (event) => {
-    if (event.target.value.length >= 0) {
-      setNoteText(event.target.value);
-    }
-  };
+  const containerRef = useRef();
 
-  // save note
-  const handleSaveClick = () => {
-    if (noteText.trim().length > 0) {
-      handleAddNote(noteText);
-      setNoteText("");
+  const handleClickAway = () => {
+    if (isEditing) {
       setIsEditing(false);
+      if (noteText.trim().length > 0) {
+        handleAddNote(noteText);
+      }
+      setNoteText("");
     }
+    setShowTextField(false);
+    containerRef.current.style.minHeight = "30px";
   };
 
-  // Handle click to enable/disable editing
-  const handleClick = () => {
-    setIsEditing(!isEditing);
+  const onTextAreaClick = () => {
+    setIsEditing(true);
+    setShowTextField(true);
+    containerRef.current.style.minHeight = "70px";
+  };
+
+  const handleChange = (event) => {
+    setNoteText(event.target.value);
   };
 
   useEffect(() => {
@@ -34,37 +52,36 @@ function AddNote({ handleAddNote }) {
   }, [isEditing]);
 
   return (
-    <div
-      className={`card ${isEditing ? "editing" : ""}  `}
-      onClick={handleClick}
-      ref={cardRef}
-    >
-      <div className="card-body">
-        {isEditing ? (
-          <textarea
-            className="card-textarea"
-            rows="8"
-            cols="10"
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <Container ref={containerRef}>
+        {showTextField ? (
+          <TextField
             placeholder="Type to add a note..."
+            variant="standard"
+            InputProps={{ disableUnderline: true }}
+            style={{ marginBottom: 10 }}
             value={noteText}
             onChange={handleChange}
             ref={textareaRef}
-          ></textarea>
+          />
         ) : (
-          <p className="card-text">{noteText || "Click to add a note..."}</p>
+          <p className="card-text" onClick={onTextAreaClick}>
+            {noteText ? noteText : "Type to add a note..."}
+          </p>
         )}
-        <div className="note-footer">
-          {isEditing && (
-            <button
-              className="btn btn-primary save  "
-              onClick={handleSaveClick}
+        {isEditing && (
+          <div className="edit-card-footer">
+            <Button
+              variant="contained"
+              onClick={handleClickAway}
+              sx={{ marginTop: "10px" }}
             >
               Save
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
+            </Button>
+          </div>
+        )}
+      </Container>
+    </ClickAwayListener>
   );
 }
 

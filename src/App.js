@@ -1,3 +1,4 @@
+import "resize-observer-polyfill/dist/ResizeObserver.global";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

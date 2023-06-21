@@ -17,6 +17,7 @@ const StyledCard = styled(Card)`
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   width: 240px;
+  // background: #ebebf2;
   margin: 8px;
   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
   padding: 10px 5px 10px 5px;
@@ -35,7 +36,7 @@ const Note = ({
   const [textValue, setTextValue] = useState("");
   const [editedValue, setEditedValue] = useState("");
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(color); // Track the selected color
+  const [selectedColor, setSelectedColor] = useState(color);
   const [isColorPopoverOpen, setIsColorPopoverOpen] = useState(false);
   const [isInfoPopoverOpen, setIsInfoPopoverOpen] = useState(false);
 
@@ -52,6 +53,7 @@ const Note = ({
     setTextValue(text);
     setIsPopoverOpen(false);
 
+    // Set cursor at the end of the text
     setTimeout(() => {
       const editableNode = editableRef.current;
       editableNode.focus();
@@ -152,6 +154,7 @@ const Note = ({
           variant="body1"
           sx={{
             display: "block",
+
             whiteSpace: "pre-wrap",
             wordWrap: "break-word",
           }}
@@ -171,9 +174,7 @@ const Note = ({
   };
 
   return (
-    <StyledCard style={{ backgroundColor: selectedColor }}>
-      {" "}
-      {/* Set the background color */}
+    <StyledCard>
       <CardContent>
         {isEditing ? (
           <div

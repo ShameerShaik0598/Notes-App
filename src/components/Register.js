@@ -1,41 +1,38 @@
-import React, { useState } from "react";
-// import "./Register.css";
-import { useForm } from "react-hook-form";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Register() {
-  let {
-    handleSubmit,
-    register,
-    reset,
-    formState: { errors },
-  } = useForm();
-  let [err, setErr] = useState("");
+  const navigate = useNavigate();
 
-  let navigate = useNavigate();
+  const initialValues = {
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+  };
 
-  const onSubmit = async (user) => {
+  const validationSchema = Yup.object({
+    first_name: Yup.string().required("First Name is required"),
+    last_name: Yup.string().required("Last Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  const onSubmit = async (user, { setSubmitting }) => {
     try {
-      //save in json server
-      let res = await axios.post(
-        "http://localhost:1500/user/user-registration",
-        user
-      );
+      // Save user in JSON server
+      await axios.post("http://localhost:1500/user/user-registration", user);
       console.log(user);
-
-      if (res.status === 201) {
-        setErr("");
-        //navigate to login
-        navigate("/login");
-      }
+      setSubmitting(false);
+      navigate("/login");
     } catch (err) {
-      console.log("err caught is", err);
-      setErr(err.message);
+      console.log("Error:", err);
     }
-    reset();
-    navigate("/");
   };
 
   return (
@@ -43,87 +40,97 @@ function Register() {
       <p className="para display-5 text-success fw-bold text-center">
         Register
       </p>
-      {err && <p className="text-center text-danger fs-1">{err}</p>}
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            {/* First Name  */}
-            <div className="m-3 mt-3">
-              <div className="inputbox d-flex justify-content-between m-1">
-                <lable className="form-label fw-bold">First Name</lable>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div>
+                {/* First Name */}
+                <div className="m-3 mt-3">
+                  <div className="inputbox d-flex justify-content-between m-1">
+                    <label className="form-label fw-bold">First Name</label>
+                  </div>
+                  <Field
+                    className="form-control"
+                    type="text"
+                    placeholder="Enter Your First Name"
+                    name="first_name"
+                  />
+                  <ErrorMessage
+                    name="first_name"
+                    component="p"
+                    className="text-danger"
+                  />
+                </div>
+                {/* Last Name */}
+                <div className="m-3 pb-3">
+                  <label className="form-label fw-bold">Last Name</label>
+                  <Field
+                    className="form-control"
+                    type="text"
+                    placeholder="Enter Your Last Name"
+                    name="last_name"
+                  />
+                  <ErrorMessage
+                    name="last_name"
+                    component="p"
+                    className="text-danger"
+                  />
+                </div>
+                {/* Email */}
+                <div className="m-3 pb-3">
+                  <label className="form-label fw-bold">Email</label>
+                  <Field
+                    className="form-control"
+                    type="email"
+                    placeholder="Enter Your Email"
+                    name="email"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="p"
+                    className="text-danger"
+                  />
+                </div>
+                {/* Password */}
+                <div className="m-3 pb-3">
+                  <label className="form-label fw-bold">Password</label>
+                  <Field
+                    className="form-control"
+                    type="password"
+                    placeholder="Enter Your Password"
+                    name="password"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="p"
+                    className="text-danger"
+                  />
+                </div>
+                <button
+                  className="registerBtn btn btn-success d-block mx-auto m-3"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  <span style={{ color: "white" }}>Submit</span>
+                </button>
+                <div className="createaccount text-center text-dark ">
+                  <p>Have an account.</p>
+                  <NavLink
+                    className="text-primary text-decoration-none"
+                    to="/login"
+                  >
+                    Login
+                  </NavLink>
+                </div>
               </div>
-              <input
-                className="form-control"
-                {...register("first_name", {
-                  required: "First Name is required",
-                })}
-                type="text"
-                placeholder="Enter Your First Name"
-              />
-              {errors.first_name && (
-                <p className=" text-danger">{errors.first_name?.message}</p>
-              )}
-            </div>
-            <div>
-              {/* Last Name  */}
-              <div className="m-3 pb-3">
-                <lable className="form-label fw-bold">Last Name</lable>
-                <input
-                  className="form-control"
-                  {...register("last_name", {
-                    required: "Last Name is required",
-                  })}
-                  type="text"
-                  placeholder="Enter Your Last Name"
-                />
-                {errors.last_name && (
-                  <p className=" text-danger">{errors.last_name?.message}</p>
-                )}
-              </div>
-              {/* Email  */}
-              <div className="m-3 pb-3">
-                <label className="form-label fw-bold">Email</label>
-                <input
-                  className="form-control "
-                  {...register("email", { required: "Email is required" })}
-                  type="email"
-                  placeholder="Enter Your Email"
-                />{" "}
-                {errors.email && (
-                  <p className=" text-danger">{errors.email?.message}</p>
-                )}
-              </div>
-              {/* Password  */}
-              <div className="m-3 pb-3">
-                <label className="form-label fw-bold">Password</label>
-                <input
-                  className="form-control "
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
-                  type="password"
-                  placeholder="Enter Your Password"
-                />{" "}
-                {errors.password && (
-                  <p className="text-danger">{errors.password?.message}</p>
-                )}
-              </div>
-
-              <button className="registerBtn btn btn-success d-block mx-auto m-3">
-                <span style={{ color: "white" }}>Submit</span>
-              </button>
-            </div>
-            <div className="createaccount text-center text-dark ">
-              <p>Have an account. </p>
-              <NavLink
-                className="text-primary text-decoration-none"
-                to="/login"
-              >
-                Login
-              </NavLink>
-            </div>
-          </div>
-        </form>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
