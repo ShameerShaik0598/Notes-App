@@ -15,16 +15,17 @@ import { FiInfo } from "react-icons/fi";
 
 const StyledCard = styled(Card)`
   border: 1px solid #e0e0e0;
+  background: skyblue;
   border-radius: 8px;
-  width: 240px;
-  // background: red;
+  width: 100%;
   margin: 8px;
+  min-height: 200px;
   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
-  padding: 10px 5px 10px 5px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 `;
 
 const Note = ({
@@ -46,7 +47,7 @@ const Note = ({
 
   const colorOptions = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF"];
 
-  const previewCharacterLimit = 100;
+  const previewCharacterLimit = 130;
   const shouldShowSeeMore = text.length > previewCharacterLimit;
 
   const editableRef = useRef(null);
@@ -158,7 +159,6 @@ const Note = ({
           variant="body1"
           sx={{
             display: "block",
-
             whiteSpace: "pre-wrap",
             wordWrap: "break-word",
           }}
@@ -178,7 +178,7 @@ const Note = ({
   };
 
   return (
-    <StyledCard>
+    <StyledCard isEditing={isEditing}>
       <CardContent>
         {isEditing ? (
           <div
@@ -194,6 +194,7 @@ const Note = ({
               width: "100%",
               height: "100%",
               lineHeight: "1.5",
+
               resize: "none",
             }}
             dangerouslySetInnerHTML={{ __html: editedValue }}
@@ -204,7 +205,7 @@ const Note = ({
             className="card-textarea mb-4"
             sx={{
               display: "block",
-              width: "200px",
+              width: "100%",
               whiteSpace: "pre-wrap",
               wordWrap: "break-word",
             }}
@@ -239,7 +240,7 @@ const Note = ({
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  width: "250px",
+                  width: "100%",
                 }}
               >
                 <FaEdit className="edit-icon" onClick={handleEditClick} />
