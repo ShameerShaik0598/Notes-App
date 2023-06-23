@@ -1,10 +1,9 @@
 import React from "react";
-import Search from "./Search";
 import { useDispatch } from "react-redux";
 import { clearState } from "../userLoginSlice";
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = ({ toggleDarkMode }) => {
+const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,16 +17,15 @@ const Dashboard = ({ toggleDarkMode }) => {
 
   return (
     <div>
-      <div className="header mb-3">
+      <div className="header mb-3 pt-3">
         <h1 className=" display-5 ms-3">Notes</h1>
-        <button onClick={toggleDarkMode} className="save">
+        {/* <button >
           Toggle Dark
-        </button>
+        </button> */}
         <button onClick={handleLogout} className="save me-3">
           Logout
         </button>
       </div>
-      {/* <Search /> */}
     </div>
   );
 };
