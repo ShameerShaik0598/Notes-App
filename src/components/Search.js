@@ -13,7 +13,7 @@ const Search = ({ handleSearchNote }) => {
       <input
         onChange={handleChange} // Use the modified event handler
         type="text"
-        placeholder="type to search"
+        placeholder="Type to search"
       ></input>
     </div>
   );

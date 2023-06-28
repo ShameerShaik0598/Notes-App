@@ -1,3 +1,4 @@
+import "resize-observer-polyfill/dist/ResizeObserver.global";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -14,6 +15,7 @@ import ErrorPage from "./components/ErrorPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import store from "./store";
+import ForgotPassword from "./components/ForgotPassword";
 
 const App = () => {
   // maintaining states
@@ -118,6 +120,11 @@ const App = () => {
           path: "register",
           element: <Register />,
         },
+        {
+          path: "forgot-password",
+          element: <ForgotPassword />,
+        },
+
         {
           path: "get-all-notes",
           element: (

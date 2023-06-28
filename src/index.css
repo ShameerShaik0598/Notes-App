@@ -37,27 +37,7 @@ code {
   margin-bottom: 0;
 }
 
-@media (max-width: 575px) {
-  .pic {
-    display: none;
-  }
-}
 
-.notes-list {
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.note.new {
-  background-color: #67d7cc;
-}
-
-textarea {
-  border: none;
-  resize: none;
-  background-color: #67d7cc;
-}
 
 textarea:focus {
   outline: none;
@@ -75,52 +55,55 @@ textarea:focus {
   cursor: pointer;
 }
 
-.note {
-  background-color: #fef68a;
-  border-radius: 10px;
-  padding: 1rem;
-  min-height: 170px;
+.color-options-container {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  gap: 8px;
+}
+
+
+.popover-body {
+  background-color: #99ff99;
+  border-radius: 8px;
+  border: none;
+  border-width: 0;
   white-space: pre-wrap;
+  width: 200px;
+  padding: 8px;
 }
 
-.edit {
-  background-color: #fef68a;
-  border-radius: 10px;
-  padding: 1rem;
-  min-height: 170px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  white-space: pre-wrap;
-}
 
-.note-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.delete-icon {
+.color-option {
+  width: 20px;
+  height: 20px;
+  margin: 5px;
   cursor: pointer;
 }
 
-.search {
-  display: flex;
-  align-items: center;
-  background-color: rgb(233, 233, 233);
-  border-radius: 10px;
-  padding: 5px;
-  margin-bottom: 1.5rem;
-}
-
-.search input {
+.popover-card {
+  width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #67d7cc;
   border: none;
-  background-color: rgb(233, 233, 233);
 }
 
-.search input:focus {
+
+
+.card-textarea {
+  border: none;
   outline: none;
+  resize: none;
+  height: 80%;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  overflow: hidden;
+}
+
+
+.notes-list {
+  display: grid;
+  grid-gap: 1rem;
+  margin: 0 10px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
