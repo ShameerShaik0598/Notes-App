@@ -91,7 +91,7 @@ function NotesList({
         <AddNote handleAddNote={handleAddNote} />
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="notes-droppable">
+        <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div
               className="notes-list"
