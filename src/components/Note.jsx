@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { MdDeleteForever } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdOutlineColorLens } from "react-icons/md";
 import { styled } from "@mui/material/styles";
-import { BsFillPaletteFill } from "react-icons/bs";
+import { FaRegEdit } from "react-icons/fa";
 import Popover from "react-popover";
 import {
   Card,
@@ -15,7 +15,7 @@ import { FiInfo } from "react-icons/fi";
 
 const StyledCard = styled(Card)`
   border: 1px solid #e0e0e0;
-  background: skyblue;
+  // background: skyblue;
   border-radius: 8px;
   width: 100%;
   margin: 8px;
@@ -26,6 +26,7 @@ const StyledCard = styled(Card)`
   justify-content: space-between;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  background-color: ${(props) => props.color};
 `;
 
 const Note = ({
@@ -45,7 +46,22 @@ const Note = ({
   const [isColorPopoverOpen, setIsColorPopoverOpen] = useState(false);
   const [isInfoPopoverOpen, setIsInfoPopoverOpen] = useState(false);
 
-  const colorOptions = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF"];
+  const colorOptions = [
+    "#FFFAD7",
+    "#FF90BB",
+    "#5A96E3",
+    "#FF8551",
+    "#9BCDD2",
+    "#E1AEFF",
+    "#F1F1F1",
+    "#FFB9B9",
+    "#B9F8D3",
+    "#F1C376",
+    "#C2DEDC",
+    "#C38154",
+    "#9384D1",
+    "#FAF7F0",
+  ];
 
   const previewCharacterLimit = 130;
   const shouldShowSeeMore = text.length > previewCharacterLimit;
@@ -103,23 +119,15 @@ const Note = ({
     setIsColorPopoverOpen(false);
   };
 
-  const popoverContent = (
-    <Card sx={{ maxWidth: 275 }}>
-      <CardContent>
-        <Typography>{text}</Typography>
-      </CardContent>
-    </Card>
-  );
-
   const popoverContentForColor = (
-    <Card sx={{ maxWidth: 275 }}>
+    <Card sx={{ maxWidth: "100%", bgcolor: "black", borderRadius: "30px" }}>
       <CardContent>
         <div className="color-options-container">
           {colorOptions.map((colorOption) => (
             <div
               key={colorOption}
               className="color-option"
-              style={{ backgroundColor: colorOption }}
+              style={{ backgroundColor: colorOption, borderRadius: "50%" }}
               onClick={() => handleColorChange(colorOption)}
             />
           ))}
@@ -152,6 +160,14 @@ const Note = ({
     setIsColorPopoverOpen(false);
   };
 
+  const popoverContent = (
+    <Card sx={{ maxWidth: 275 }}>
+      <CardContent>
+        <Typography>{text}</Typography>
+      </CardContent>
+    </Card>
+  );
+
   const popoverContentForInfo = (
     <Card sx={{ maxWidth: 400, background: "#EBEBF2" }}>
       <CardContent>
@@ -169,6 +185,10 @@ const Note = ({
     </Card>
   );
 
+  const handleColorPopoverOpen = () => {
+    setIsColorPopoverOpen(true);
+  };
+
   const handleInfoPopoverOpen = () => {
     setIsInfoPopoverOpen(true);
   };
@@ -178,7 +198,7 @@ const Note = ({
   };
 
   return (
-    <StyledCard isEditing={isEditing}>
+    <StyledCard color={selectedColor} isEditing={isEditing}>
       <CardContent>
         {isEditing ? (
           <div
@@ -216,7 +236,7 @@ const Note = ({
       </CardContent>
       <CardActions>
         {isEditing ? (
-          <div>
+          <div className="m-1 p-1">
             <Button
               onClick={handleSave}
               variant="contained"
@@ -234,60 +254,58 @@ const Note = ({
           </div>
         ) : (
           <>
-            <>
-              <div
-                className="icons-container"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
+            <div
+              className="icons-container mb-1"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <FaRegEdit className="edit-icon ms-2" onClick={handleEditClick} />
+              <Popover
+                isOpen={isPopoverOpen}
+                body={popoverContent}
+                onOuterAction={handlePopoverClose}
+                preferPlace="below"
               >
-                <FaEdit className="edit-icon" onClick={handleEditClick} />
-                <Popover
-                  isOpen={isPopoverOpen}
-                  body={popoverContent}
-                  onOuterAction={handlePopoverClose}
-                  preferPlace="below"
-                >
-                  <BsFillPaletteFill
-                    className="change-color-icon"
-                    size="1.3em"
-                    onClick={() => setIsColorPopoverOpen(true)}
-                  />
-                  {isColorPopoverOpen && (
-                    <Popover
-                      isOpen={isColorPopoverOpen}
-                      body={popoverContentForColor}
-                      onOuterAction={handleColorPopoverClose}
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left",
-                      }}
-                    ></Popover>
-                  )}
-                </Popover>
-                <Popover
-                  isOpen={isInfoPopoverOpen}
-                  body={popoverContentForInfo}
-                  onOuterAction={handleInfoPopoverClose}
-                  preferPlace="below"
-                >
-                  <FiInfo
-                    className="info-icon"
-                    size="1.3em"
-                    onClick={handleInfoPopoverOpen}
-                  />
-                </Popover>
-                <MdDeleteForever
-                  className="delete-icon"
+                {" "}
+              </Popover>
+
+              <Popover
+                className="color-popover"
+                isOpen={isColorPopoverOpen}
+                body={popoverContentForColor}
+                onOuterAction={handleColorPopoverClose}
+                preferPlace="below"
+              >
+                <MdOutlineColorLens
+                  className="change-color-icon"
                   size="1.3em"
-                  onClick={() => {
-                    deleteNote(id);
-                  }}
+                  onClick={handleColorPopoverOpen}
                 />
-              </div>
-            </>
+              </Popover>
+
+              <Popover
+                isOpen={isInfoPopoverOpen}
+                body={popoverContentForInfo}
+                onOuterAction={handleInfoPopoverClose}
+                preferPlace="below"
+              >
+                <FiInfo
+                  className="info-icon"
+                  size="1.3em"
+                  onClick={handleInfoPopoverOpen}
+                />
+              </Popover>
+              <MdOutlineDeleteForever
+                className="delete-icon me-2"
+                size="1.3em"
+                onClick={() => {
+                  deleteNote(id);
+                }}
+              />
+            </div>
           </>
         )}
       </CardActions>
