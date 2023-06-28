@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { MdDeleteForever } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdOutlineColorLens } from "react-icons/md";
 import { styled } from "@mui/material/styles";
-import { BsFillPaletteFill } from "react-icons/bs";
+import { FaRegEdit } from "react-icons/fa";
 import Popover from "react-popover";
 import {
   Card,
@@ -46,7 +46,22 @@ const Note = ({
   const [isColorPopoverOpen, setIsColorPopoverOpen] = useState(false);
   const [isInfoPopoverOpen, setIsInfoPopoverOpen] = useState(false);
 
-  const colorOptions = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF"];
+  const colorOptions = [
+    "#FFFAD7",
+    "#FF90BB",
+    "#5A96E3",
+    "#FF8551",
+    "#9BCDD2",
+    "#E1AEFF",
+    "#F1F1F1",
+    "#FFB9B9",
+    "#B9F8D3",
+    "#F1C376",
+    "#C2DEDC",
+    "#C38154",
+    "#9384D1",
+    "#FAF7F0",
+  ];
 
   const previewCharacterLimit = 130;
   const shouldShowSeeMore = text.length > previewCharacterLimit;
@@ -105,14 +120,14 @@ const Note = ({
   };
 
   const popoverContentForColor = (
-    <Card sx={{ maxWidth: 275 }}>
+    <Card sx={{ maxWidth: "100%", bgcolor: "black", borderRadius: "30px" }}>
       <CardContent>
         <div className="color-options-container">
           {colorOptions.map((colorOption) => (
             <div
               key={colorOption}
               className="color-option"
-              style={{ backgroundColor: colorOption }}
+              style={{ backgroundColor: colorOption, borderRadius: "50%" }}
               onClick={() => handleColorChange(colorOption)}
             />
           ))}
@@ -221,7 +236,7 @@ const Note = ({
       </CardContent>
       <CardActions>
         {isEditing ? (
-          <div>
+          <div className="m-1 p-1">
             <Button
               onClick={handleSave}
               variant="contained"
@@ -240,14 +255,14 @@ const Note = ({
         ) : (
           <>
             <div
-              className="icons-container"
+              className="icons-container mb-1"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 width: "100%",
               }}
             >
-              <FaEdit className="edit-icon" onClick={handleEditClick} />
+              <FaRegEdit className="edit-icon ms-2" onClick={handleEditClick} />
               <Popover
                 isOpen={isPopoverOpen}
                 body={popoverContent}
@@ -264,7 +279,7 @@ const Note = ({
                 onOuterAction={handleColorPopoverClose}
                 preferPlace="below"
               >
-                <BsFillPaletteFill
+                <MdOutlineColorLens
                   className="change-color-icon"
                   size="1.3em"
                   onClick={handleColorPopoverOpen}
@@ -283,8 +298,8 @@ const Note = ({
                   onClick={handleInfoPopoverOpen}
                 />
               </Popover>
-              <MdDeleteForever
-                className="delete-icon"
+              <MdOutlineDeleteForever
+                className="delete-icon me-2"
                 size="1.3em"
                 onClick={() => {
                   deleteNote(id);

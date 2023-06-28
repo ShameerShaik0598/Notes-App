@@ -3,17 +3,23 @@ import { Box, TextField, ClickAwayListener, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { v4 as uuid } from "uuid";
 
-const Container = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
-  border-color: #e0e0e0;
-  width: 600px;
-  border-radius: 8px;
-  min-height: 30px;
-  padding: 10px 15px;
-`;
+const Container = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  margin: "auto",
+  boxSizing: "border-box",
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 2px 6px rgba(255, 255, 255, 0.2)"
+      : "0 1px 2px rgba(0, 0, 0, 0.3)",
+  borderColor: theme.palette.mode === "dark" ? "#424242" : "#e0e0e0",
+  background: theme.palette.mode === "dark" ? "#424242" : "#fff",
+  color: theme.palette.mode === "dark" ? "#fff" : "#000",
+  width: "600px",
+  borderRadius: "8px",
+  minHeight: "30px",
+  padding: "10px 15px",
+}));
 
 function AddNote({ handleAddNote }) {
   const [noteText, setNoteText] = useState("");

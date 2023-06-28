@@ -8,7 +8,6 @@ import axios from "axios";
 
 //import components
 import NotesList from "./components/NotesList";
-import Search from "./components/Search";
 import Dashboard from "./components/Dashboard";
 import RootLayout from "./components/Rootlayout";
 import ErrorPage from "./components/ErrorPage";
@@ -21,8 +20,6 @@ const App = () => {
   // maintaining states
 
   const [notes, setNotes] = useState([]);
-
-  const [searchText, setSearchText] = useState("");
 
   const [noteAdded, setNoteAdded] = useState(false);
 
@@ -129,9 +126,6 @@ const App = () => {
           path: "get-all-notes",
           element: (
             <NotesList
-              notes={notes.filter((note) =>
-                note.text.toLocaleLowerCase().includes(searchText)
-              )}
               handleAddNote={addNote}
               deleteNote={deleteNote}
               noteAdded={noteAdded}
@@ -141,7 +135,6 @@ const App = () => {
               setUpdatedNote={setUpdatedNote}
               noteDeleted={noteDeleted}
               setNoteDeleted={setNoteDeleted}
-              handleSearchNote={setSearchText}
             />
           ),
         },
@@ -160,7 +153,7 @@ const App = () => {
           {/* Provide to App  */}
           <div>
             <Dashboard />
-            <Search setSearchText={setSearchText} />
+
             <div>
               <NotesList />
             </div>

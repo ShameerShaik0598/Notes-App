@@ -4,8 +4,12 @@ import { useState } from "react";
 import Dashboard from "./Dashboard";
 
 function RootLayout() {
-  //use location
+  
+  // use location
   const location = useLocation();
+
+  // set a state for darkMode
+  const [darkMode, setDarkMode] = useState(false);
 
   // Check if the current location is the noteslist page
   const isNotesList = location.pathname === "/get-all-notes";
@@ -16,12 +20,27 @@ function RootLayout() {
   // Check if the current location is the register page
   const isRegisterPage = location.pathname === "/register";
 
+  // toggle mode function
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
-    <div>
+    <div
+      className={`${
+        darkMode && !isLoginPage && !isRegisterPage ? "dark-mode" : ""
+      }`}
+    >
       <div className="container">
         <div style={{ minHeight: "80vh" }}>
-          {!isLoginPage && !isRegisterPage && <Dashboard />}
-          {isNotesList ? <Outlet /> : <Outlet />}
+          {!isLoginPage && !isRegisterPage && (
+            <Dashboard toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+          )}
+          {isNotesList ? (
+            <Outlet toggleDarkMode={toggleDarkMode} />
+          ) : (
+            <Outlet />
+          )}
         </div>
       </div>
     </div>

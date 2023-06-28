@@ -50,16 +50,6 @@ textarea:focus {
   gap: 8px;
 }
 
-/* .popover-body {
-  background-color: #99ff99;
-  border-radius: 8px;
-  border: none;
-  border-width: 0;
-  white-space: pre-wrap;
-  width: 200px;
-  padding: 8px;
-} */
-
 .color-option {
   width: 20px;
   height: 20px;
@@ -83,4 +73,12 @@ textarea:focus {
   grid-gap: 1rem;
   margin: 0 10px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.dark-mode {
+  background: black;
+}
+
+.dark-mode h1 {
+  color: white;
 }
